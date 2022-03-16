@@ -1,0 +1,6 @@
+[{
+  "name": "BINANCE SMART CHAIN",
+  "short": "BSC",
+  "url": "wss://bsc-ws-node.nariox.org:443",
+  "explorer": "https://bscscan.com"
+}]
