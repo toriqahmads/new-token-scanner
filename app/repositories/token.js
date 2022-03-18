@@ -20,7 +20,6 @@ const findAll = async(network, filter) => {
   try {
     const start_date = new Date(filter.start_date).setHours(0, 0, 0);
     const end_date = new Date(filter.end_date).setHours(23, 59, 59);
-    console.log(dateDiffInDays(start_date, end_date))
     if (dateDiffInDays(start_date, end_date) > 3) {
       const error = new Error(`2 days maximum for retrieving data`);
       error.status = 400;
@@ -52,7 +51,7 @@ const findAll = async(network, filter) => {
     const Tokens = await getDocs(queries);
     const tokens = [];
     Tokens.forEach((token) => {
-      tokens.push({ id: token.id, ...token.data() });
+      tokens.push(token.data());
     });
 
     const last_visible = Tokens.docs.length > 0 ? Tokens.docs[Tokens.docs.length - 1].get('address') : null;

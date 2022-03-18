@@ -78,7 +78,6 @@ const run = async() => {
             try {
               const receipt = await getTransactionReceipt(web3, txhash);
               if (receipt && receipt.contractAddress) {
-                console.log('new contract creation detected! address', receipt.contractAddress);
                 const erc20Contract = new web3.eth.Contract(erc20Abi, receipt.contractAddress);
                 const erc20 = new ERC20(erc20Contract);
                 try {
@@ -100,12 +99,12 @@ const run = async() => {
                     explore_owner: `${node.explorer}/address/${owner}`,
                     created_at: Date.now()
                   });
+
+                  console.log('new contract creation detected! address', receipt.contractAddress);
                 } catch (err) {
-                  console.error('error', err);
                 }
               }
             } catch (errReceipt) {
-              console.error('error get receipt', errReceipt);
             }
           }
         }

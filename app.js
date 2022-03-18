@@ -15,8 +15,8 @@ app.use(helmet());
 
 require('./app/workers/token-scanner').Run();
 
-const tokenRoutes = require('./routes/token');
-app.use('/tokens', tokenRoutes);
+const routers = require('./routes');
+routers(app);
 
 //handling error
 app.use((req, res, next) => {
