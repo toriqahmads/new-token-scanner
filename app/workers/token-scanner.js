@@ -4,8 +4,6 @@ const erc20Abi = require('../config/erc20-abi.json');
 const nodeList = require('../config/node-list.json');
 const tokenRepository = require('../repositories/token');
 
-const contractCreation = new RegExp(`^0x60806040.*$`, 'gmi');
-
 const wsOption = {
   timeout: 10000,
   clientConfig: {
@@ -74,38 +72,36 @@ const run = async() => {
       subscription.on('data', async function(txhash) {
         const tx = await web3.eth.getTransaction(txhash);
         if (tx && (!tx.to || tx.to == null)) {
-          if (contractCreation.test(tx.input)) {
-            try {
-              const receipt = await getTransactionReceipt(web3, txhash);
-              if (receipt && receipt.contractAddress) {
-                const erc20Contract = new web3.eth.Contract(erc20Abi, receipt.contractAddress);
-                const erc20 = new ERC20(erc20Contract);
-                try {
-                  const decimals = await erc20.getDecimals();
-                  const name = await erc20.getName();
-                  const symbol = await erc20.getSymbol();
-                  let owner = await erc20.getOwner();
-                  owner = !owner ? tx.from : owner;
+          try {
+            const receipt = await getTransactionReceipt(web3, txhash);
+            if (receipt && receipt.contractAddress) {
+              const erc20Contract = new web3.eth.Contract(erc20Abi, receipt.contractAddress);
+              const erc20 = new ERC20(erc20Contract);
+              try {
+                const decimals = await erc20.getDecimals();
+                const name = await erc20.getName();
+                const symbol = await erc20.getSymbol();
+                let owner = await erc20.getOwner();
+                owner = !owner ? tx.from : owner;
 
-                  await tokenRepository.save({
-                    address: receipt.contractAddress,
-                    name,
-                    symbol,
-                    decimals,
-                    owner,
-                    network_name: node.name,
-                    network_short: node.short,
-                    explore_token: `${node.explorer}/token/${receipt.contractAddress}`,
-                    explore_owner: `${node.explorer}/address/${owner}`,
-                    created_at: Date.now()
-                  });
+                await tokenRepository.save({
+                  address: receipt.contractAddress,
+                  name,
+                  symbol,
+                  decimals,
+                  owner,
+                  network_name: node.name,
+                  network_short: node.short,
+                  explore_token: `${node.explorer}/token/${receipt.contractAddress}`,
+                  explore_owner: `${node.explorer}/address/${owner}`,
+                  created_at: Date.now()
+                });
 
-                  console.log('new contract creation detected! address', receipt.contractAddress);
-                } catch (err) {
-                }
+                console.log('new contract creation detected! address', receipt.contractAddress);
+              } catch (err) {
               }
-            } catch (errReceipt) {
             }
+          } catch (errReceipt) {
           }
         }
       });
