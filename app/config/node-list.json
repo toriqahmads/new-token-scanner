@@ -1,6 +1,16 @@
 [{
   "name": "BINANCE SMART CHAIN",
   "short": "BSC",
-  "url": "wss://bsc-ws-node.nariox.org:443",
+  "url": "",
   "explorer": "https://bscscan.com"
+}, {
+  "name": "Fantom Opera",
+  "short": "FTM",
+  "url": "",
+  "explorer": "https://ftmscan.com"
+}, {
+  "name": "Ethereum",
+  "short": "ETH",
+  "url": "",
+  "explorer": "https://etherscan.com"
 }]

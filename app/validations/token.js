@@ -9,7 +9,10 @@ const findAll = () => {
       .isString()
       .escape()
       .isIn([
-        'bsc'
+        'bsc',
+        'ftm',
+        'eth',
+        'matic'
       ])
       .withMessage('please input a valid network'),
     query('start_date')

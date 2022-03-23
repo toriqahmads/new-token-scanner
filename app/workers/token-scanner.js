@@ -65,7 +65,7 @@ const run = async() => {
 
       subscription = web3.eth.subscribe('pendingTransactions', function (error) {
         if (error) {
-          throw new Error(error.message);
+          console.error(`error node ${node.short}: ${error.message}`);
         }
       });
 
@@ -97,7 +97,7 @@ const run = async() => {
                   created_at: Date.now()
                 });
 
-                console.log('new contract creation detected! address', receipt.contractAddress);
+                console.log(`new contract creation detected on ${node.short}! address ${receipt.contractAddress}`);
               } catch (err) {
               }
             }
